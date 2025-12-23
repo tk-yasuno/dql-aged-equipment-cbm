@@ -3,10 +3,8 @@ data/
 *.csv
 **/private_benchmark/
 
-# Training outputs
-outputs_*/
+# Training outputs (exclude test/debug only)
 test_progress_debug/
-comparison_analysis/
 
 # Python
 __pycache__/

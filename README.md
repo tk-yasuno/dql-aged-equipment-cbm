@@ -116,9 +116,9 @@ flowchart TB
 
 ```
 data/private_benchmark/
-├── 設備の設置年月日.csv          # Equipment installation date data (205 units)
-├── 設備諸元_実測値100以上.csv      # Equipment specification data
-└── 測定値examples_3設備_測定項目_実測値_20251217.csv  # Measurement data samples
+├── # Equipment installation date data (205 units)
+├── # Equipment specification data
+└── # Measurement data samples
 ```
 
 ### Learning Results

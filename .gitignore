@@ -3,6 +3,11 @@ data/
 *.csv
 **/private_benchmark/
 
+# Equipment list files (contain sensitive equipment IDs)
+*_List.md
+Lifetime_*.md
+Pump_Equipment_*.md
+
 # Training outputs (exclude test/debug only)
 test_progress_debug/
 

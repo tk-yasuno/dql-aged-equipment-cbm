@@ -1,0 +1,97 @@
+# Equipment CBM MVP Configuration
+
+# Equipment and Measurement
+equipment:
+  target_equipment_id: 43175      # ボイラー(40t)
+  target_measurement_id: 167473   # 温度_南東部上側壁②
+  equipment_name: "ボイラー(40t)"
+  measurement_name: "温度_南東部上側壁②"
+
+# Environment Parameters
+environment:
+  horizon: 100                    # Episode length (steps)
+  gamma: 0.95                     # Discount factor
+  cost_lambda: 0.1               # Cost penalty scaling factor
+  
+  # Temperature settings (will be overridden by actual data)
+  temperature_range:
+    min: 0.0
+    max: 150.0
+  
+  # Normal range (will be set from Smin/Smax in data)
+  normal_temp_range:
+    min: 15.0
+    max: 100.0
+    
+  # Equipment aging parameters
+  aging:
+    initial_age: 0.0              # Initial equipment age (years)
+    aging_factor: 0.01            # Annual increase in anomaly probability
+    max_age: 50.0                 # Maximum equipment age for normalization
+    use_real_age: true            # Use real age data from installation dates
+
+# Reward Function
+reward:
+  risk:
+    normal: 1.0                   # Reward for normal state
+    anomalous: -10.0              # Penalty for anomalous state
+  
+  cost:
+    do_nothing: 0.0               # No cost
+    repair: 3.0                   # Repair cost
+    replace: 8.0                  # Replace cost
+
+# State Transition (Action-specific probabilities)
+# These can be adjusted based on domain knowledge
+transition:
+  do_nothing:
+    # Will be estimated from data
+    comment: "Estimated from historical data"
+  
+  repair:
+    # Enhanced recovery probabilities
+    normal_to_normal: 0.98
+    normal_to_anomalous: 0.02
+    anomalous_to_normal: 0.80
+    anomalous_to_anomalous: 0.20
+  
+  replace:
+    # Best recovery probabilities
+    normal_to_normal: 0.99
+    normal_to_anomalous: 0.01
+    anomalous_to_normal: 0.95
+    anomalous_to_anomalous: 0.05
+
+# DQN Training Parameters
+training:
+  n_episodes: 4000                # Number of training episodes
+  learning_rate: 1.0e-4           # Adam learning rate
+  batch_size: 64                  # Mini-batch size
+  buffer_size: 100000             # Replay buffer capacity
+  target_update_freq: 1000        # Target network update frequency
+  
+  # QR-DQN specific
+  n_quantiles: 51                 # Number of quantiles
+  kappa: 1.0                      # Huber loss threshold
+  
+  # Network architecture
+  hidden_dims:
+    shared: [128, 64]
+    value: [64, 64]
+    advantage: [64, 64]
+  
+  # Noisy Networks
+  sigma_init: 0.5                 # Initial noise scale
+
+# Evaluation
+evaluation:
+  n_episodes: 10                  # Number of test episodes
+  render: false                   # Render episodes
+
+# Output
+output:
+  save_dir: "outputs_cbm"
+  save_frequency: 100             # Save checkpoint every N episodes
+  
+# Random Seed
+seed: 42
